@@ -7,7 +7,7 @@ ENV ENABLE_MIDDLEWARE_LOG=1 \
     CONFIG_AUDIO_DATA_PATH=/data \
     CONFIG_TOKEN_DATA_PATH=/data \
     LOG_LEVEL=info \
-    APP_NAME="TTS2CUBE-Pico"
+    APP_NAME="IHost-speaker-controller"
 
 WORKDIR /workspace/ewelink-cube-tts-addon
 
