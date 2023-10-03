@@ -258,6 +258,7 @@ apiv1.get('/api/v1/audio/list', async (req, res) => {
 apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
     // reqAudioUrl 实际上是音频文件的文件名，真实 URL 在调用接口前拼装
     const reqAudioUrl = _.get(req, 'body.audioUrl');
+    const reqAudioFullUrl = _.get(req, 'body.reqAudioFullUrl');
     const logType = '(apiv1.ihost.playAudio)';
     const result = {
         error: 0,
@@ -269,7 +270,7 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
         const host = process.env.CONFIG_CUBE_HOSTNAME;
         const port = SERVER_LISTEN_PORT;
         const dir = existInAudioFilesDir(reqAudioUrl) ? '_audio' : '_audio-cache';
-        const audioUrl = `http://${host}:${port}/${dir}/${reqAudioUrl}`;
+        const audioUrl = reqAudioFullUrl ?? `http://${host}:${port}/${dir}/${reqAudioUrl}`;
         logger.debug(`${logType} audioUrl: ${audioUrl}`);
         const playRes = await playAudioFile(audioUrl);
         logger.debug(`${logType} playRes: ${JSON.stringify(playRes)}`);
