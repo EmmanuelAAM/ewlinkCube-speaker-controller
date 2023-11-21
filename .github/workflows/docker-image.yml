@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build-and-publish:
+
+    runs-on: linux/arm/v7
+
+    steps:
+    - name: Bootstrap app
+      run: ./scripts/bootstrap.sh 
+    - name: Build  app
+      run: ./scripts/build.sh {{ secrets.version }}
+    - name: Build  app
+      run: ./docker/publish.sh {{ secrets.usr }} {{ secrets.psw }}
