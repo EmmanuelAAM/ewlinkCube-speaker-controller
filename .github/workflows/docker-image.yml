@@ -30,7 +30,7 @@ jobs:
         usr: ${{ secrets.USR }}
         psw: ${{ secrets.PSW }}
       working-directory: ./scripts
-      run: build.sh {{ secrets.VERSION }}
+      run: bash build.sh
     - name: Build  app
       env:
         name: ${{ secrets.NAME }}
@@ -38,4 +38,4 @@ jobs:
         usr: ${{ secrets.USR }}
         psw: ${{ secrets.PSW }}
       working-directory: ./docker
-      run: bash ./docker/publish.sh {{ secrets.NAME }} {{ secrets.VERSION }} {{ secrets.USR }} {{ secrets.PSW }}
+      run: bash ./docker/publish.sh
