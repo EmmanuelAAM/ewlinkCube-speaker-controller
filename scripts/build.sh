@@ -7,15 +7,15 @@ echo $ENVIRONMENT_VARIABLE_NAME
 npx lerna run build
 
 
-cp -r packages/server/dist/build/server
+cp -r ../packages/server/dist build/server
 
-cp -r packages/web/dist/build/public
+cp -r ../packages/web/dist build/public
 
 echo ls
 
-cp docker/Dockerfile build
-cp docker/publish.sh build
-cp docker/.dockerignore build
+cp ../docker/Dockerfile build
+cp ../docker/publish.sh build
+cp ../docker/.dockerignore build
 
 cat << EOF > ./build/buildinfo
 Build Version: $version
