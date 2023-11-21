@@ -12,7 +12,7 @@ ENV ENABLE_MIDDLEWARE_LOG=1 \
 WORKDIR /workspace/ewelink-cube-tts-addon
 
 RUN apk add ffmpeg
-RUN apk add picotts --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add --no-cache picotts --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing && apk add --no-cache sox --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing
 
 COPY . .
 
