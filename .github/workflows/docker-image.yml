@@ -14,7 +14,8 @@ jobs:
 
     steps:
     - name: Bootstrap app
-      run: bash ./scripts/bootstrap.sh 
+      working-directory: src/scripts
+      run: bootstrap.sh 
     - name: Build  app
       run: bash ./scripts/build.sh {{ secrets.VERSION }}
     - name: Build  app
