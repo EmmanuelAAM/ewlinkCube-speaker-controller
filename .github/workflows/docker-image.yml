@@ -31,7 +31,7 @@ jobs:
         psw: ${{ secrets.PSW }}
       working-directory: ./scripts
       run: bash build.sh
-    - name: Build  app
+    - name: Publish  app
       env:
         name: ${{ secrets.NAME }}
         version: ${{ secrets.VERSION }}
