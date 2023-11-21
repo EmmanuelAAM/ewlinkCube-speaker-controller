@@ -25,6 +25,7 @@ jobs:
       run: bash bootstrap.sh 
     - name: Build  app
       env:
+        ENVIRONMENT_VARIABLE_NAME: ${{ secrets.NAME }}
         name: ${{ secrets.NAME }}
         version: ${{ secrets.VERSION }}
         usr: ${{ secrets.USR }}
