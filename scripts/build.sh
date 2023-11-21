@@ -14,6 +14,6 @@ cp docker/publish.sh build
 cp docker/.dockerignore build
 
 cat << EOF > ./build/buildinfo
-Build Version: $0
+Build Version: $version
 Build Date: $(date '+%F %T')
 EOF
