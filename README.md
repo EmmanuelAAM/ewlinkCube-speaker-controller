@@ -1,4 +1,4 @@
-# TTS2CUBE-Pico
+# ewlinkCube-speaker-controller
 TTS2CUBE-Pico addon.
 ## Development
 1. Init dev environment
