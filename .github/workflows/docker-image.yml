@@ -13,8 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
     - name: Bootstrap app
-      working-directory: ./scripts
       run: bootstrap.sh 
     - name: Build  app
       working-directory: ./scripts
