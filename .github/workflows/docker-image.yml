@@ -16,6 +16,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
     - name: Bootstrap app
+      working-directory: ./scripts
       run: bash bootstrap.sh 
     - name: Build  app
       working-directory: ./scripts
