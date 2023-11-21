@@ -11,8 +11,6 @@ docker build -t $0 --platform=linux/arm/v7 .
 docker build -t $0:v$1 --platform=linux/arm/v7 .
 
 # 4. Login Docker Hub account
-read -p "Docker Hub username: " username
-read -s -p "Docker Hub password: " password
 docker login -u=$2 -p=$3
 
 # 5. Push Docker image
