@@ -6,9 +6,12 @@ echo ENVIRONMENT_VARIABLE_NAME
 echo $ENVIRONMENT_VARIABLE_NAME
 npx lerna run build
 
-cp -r packages/server/dist build/server
 
-cp -r packages/web/dist build/public
+cp -r packages/server/dist/build/server
+
+cp -r packages/web/dist/build/public
+
+echo ls
 
 cp docker/Dockerfile build
 cp docker/publish.sh build
