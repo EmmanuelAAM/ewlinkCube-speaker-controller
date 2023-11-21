@@ -10,7 +10,7 @@ jobs:
 
   build-and-publish:
 
-    runs-on: Linux/ARMv7
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout Repository
