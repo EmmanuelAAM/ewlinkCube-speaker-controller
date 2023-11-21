@@ -16,6 +16,6 @@ jobs:
     - name: Bootstrap app
       run: ./scripts/bootstrap.sh 
     - name: Build  app
-      run: ./scripts/build.sh {{ secrets.version }}
+      run: ./scripts/build.sh {{ secrets.VERSION }}
     - name: Build  app
-      run: ./docker/publish.sh {{ secrets.usr }} {{ secrets.psw }}
+      run: ./docker/publish.sh {{ secrets.usr }} {{ secrets.PSW }}
