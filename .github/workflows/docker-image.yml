@@ -14,9 +14,11 @@ jobs:
 
     steps:
     - name: Bootstrap app
-      working-directory: src/scripts
+      working-directory: ./scripts
       run: bootstrap.sh 
     - name: Build  app
-      run: bash ./scripts/build.sh {{ secrets.VERSION }}
+      working-directory: ./scripts
+      run: build.sh {{ secrets.VERSION }}
     - name: Build  app
+      working-directory: ./docker
       run: bash ./docker/publish.sh {{ secrets.NAME }} {{ secrets.VERSION }} {{ secrets.USR }} {{ secrets.PSW }}
