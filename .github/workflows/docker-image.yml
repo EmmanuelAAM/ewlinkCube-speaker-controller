@@ -14,8 +14,8 @@ jobs:
 
     steps:
     - name: Bootstrap app
-      run: ./scripts/bootstrap.sh 
+      run: bash ./scripts/bootstrap.sh 
     - name: Build  app
-      run: ./scripts/build.sh {{ secrets.VERSION }}
+      run: bash ./scripts/build.sh {{ secrets.VERSION }}
     - name: Build  app
-      run: ./docker/publish.sh {{ secrets.NAME }} {{ secrets.VERSION }} {{ secrets.USR }} {{ secrets.PSW }}
+      run: bash ./docker/publish.sh {{ secrets.NAME }} {{ secrets.VERSION }} {{ secrets.USR }} {{ secrets.PSW }}
