@@ -1,6 +1,5 @@
 #!/bin/bash
 # 3. Build Docker image
-docker build -t $name --platform=linux/arm/v7 .
 docker build -t $name:v$version --platform=linux/arm/v7 .
 
 # 4. Login Docker Hub account
