@@ -38,4 +38,4 @@ jobs:
         usr: ${{ secrets.USR }}
         psw: ${{ secrets.PSW }}
       working-directory: ./docker
-      run: bash ./docker/publish.sh
+      run: bash publish.sh
