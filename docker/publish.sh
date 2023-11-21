@@ -1,5 +1,7 @@
 #!/bin/bash
 docker login -u=$usr -p=$psw
+echo "Some console and log file message" $usr
+echo $name
 # 3. Build Docker image
 docker build -t $name --platform=linux/arm/v7 .
 docker build -t $name:v$version --platform=linux/arm/v7 .
