@@ -10,7 +10,7 @@ jobs:
 
   build-and-publish:
 
-    runs-on: linux/arm/v7
+    runs-on: ubuntu-latest
 
     steps:
     - name: Bootstrap app
