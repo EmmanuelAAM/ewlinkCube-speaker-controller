@@ -1,7 +1,5 @@
 #!/bin/bash
-
-read -p "Build version: "
-build_version=$REPLY
+build_version=$0
 
 rm -rf build && mkdir build
 
