@@ -18,4 +18,4 @@ jobs:
     - name: Build  app
       run: ./scripts/build.sh {{ secrets.VERSION }}
     - name: Build  app
-      run: ./docker/publish.sh {{ secrets.usr }} {{ secrets.PSW }}
+      run: ./docker/publish.sh {{ secrets.USR }} {{ secrets.PSW }}
