@@ -6,7 +6,6 @@ wait
 docker login -u=$usr -p=$psw
 
 # 3. Push Docker image
-docker push ewlink-cube-speaker-control
 docker tag ewlink-cube-speaker-control emmanuelam93/ewlink-cube-speaker-control:latest
 docker push emmanuelam93/ewlink-cube-speaker-control:latest
 # 4. Logout Docker Hub account
