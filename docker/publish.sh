@@ -1,13 +1,14 @@
 #!/bin/bash
-# 3. Build Docker image
+# 1. Build Docker image
 docker build -t $name:v$version --platform=linux/arm/v7 .
 
-# 4. Login Docker Hub account
+# 2. Login Docker Hub account
 docker login -u=$usr -p=$psw
 
-# 5. Push Docker image
+# 3. Push Docker image
 docker push $name
-docker push $name:v$version
+docker tag $name $usr/$name:v$version
+docker push $usr/$name:v$version
 
-# 6. Logout Docker Hub account
+# 4. Logout Docker Hub account
 docker logout
