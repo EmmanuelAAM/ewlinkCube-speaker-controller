@@ -9,9 +9,11 @@ cp -r ../packages/server/dist ./build/server
 
 cp -r ../packages/web/dist ./build/public
 
+echo "Build content: "
 ls build
-
+echo "BE content: "
 ls build/server
+echo "FE content: "
 ls build/public
 
 cp ../docker/Dockerfile ./build
