@@ -260,10 +260,6 @@ apiv1.get('/api/v1/audio/list', async (req, res) => {
 apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
     const reqAudioUrl = _.get(req, 'body.audioUrl');
     const reqAudioDownloadUrl = _.get(req, 'body.reqAudioFullUrl');
-    if (reqAudioDownloadUrl) {
-        console.log(`File url: ${reqAudioDownloadUrl}`);
-        logger.debug(`File url: ${reqAudioDownloadUrl}`);
-    }
     const reqAudioFileName = _.get(req, 'body.reqAudioFileName');
     const logType = '(apiv1.ihost.playAudio)';
     let audioUrl = '';
@@ -280,36 +276,34 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
     try {
         if (reqAudioDownloadUrl) {
             console.log(`File url : ${reqAudioDownloadUrl}`);
-            logger.debug(`File url: ${reqAudioDownloadUrl}`);
 
             const dirname = getAudioFilesDir();
             // //await fs.unlink(path.join(dirname, audioList[i].filename));
             const response = await axios.get(reqAudioDownloadUrl);
             console.log(`response : ${response}`);
-            logger.debug(`response: ${response}`);
             const pathToFile = path.join(dirname, reqAudioFileName);
 
             console.log(`pathToFile : ${pathToFile}`);
-            logger.debug(`pathToFile: ${pathToFile}`);
 
             const filePath = fs.createWriteStream(pathToFile);
             response.data.pipe(filePath);
             filePath.on('finish', () => {
                 filePath.close();
                 console.log('Download Completed');
-                logger.debug('Download Completed');
             });
             audioUrl = `http://${host}:${port}/${dirname}/${pathToFile}`;
+            console.log(audioUrl);
+
         } else {
             audioUrl = `http://${host}:${port}/${dir}/${reqAudioUrl}`;
         }
-        logger.debug(`${logType} audioUrl: ${audioUrl}`);
+        console.log(`${logType} audioUrl: ${audioUrl}`);
         const playRes = await playAudioFile(audioUrl);
-        logger.debug(`${logType} playRes: ${JSON.stringify(playRes)}`);
+        console.log(`${logType} playRes: ${JSON.stringify(playRes)}`);
         return res.send(result);
     } catch (err: any) {
         console.log(err);
-        logger.error(`${logType} ${err.name}: ${err.message}`);
+        console.log(`${logType} ${err.name}: ${err.message}`);
         result.error = ERR_SERVER_INTERNAL;
         result.msg = 'Server error';
         logger.info(`${logType} Result: ${JSON.stringify(result)}`);
