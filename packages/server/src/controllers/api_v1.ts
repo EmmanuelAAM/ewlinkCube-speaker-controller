@@ -277,19 +277,17 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
 
     try {
         if (reqAudioDownloadUrl) {
-            console.log(`File url : ${reqAudioDownloadUrl}`);
+            console.log(`File Content : ${reqAudioDownloadUrl}`);
 
             const pathToFile = path.join(dirname, reqAudioFileName ?? 'temporal.wav');
             console.log(`pathToFile : ${pathToFile}`);
-            const filePath = fs.createWriteStream(pathToFile);
+            let base64Image = reqAudioDownloadUrl.split(';base64,').pop();
 
-            http.get(reqAudioDownloadUrl, function (response) {
-                response.pipe(filePath);
-                filePath.on('finish', () => {
-                    filePath.close();
-                    console.log('Download Completed');
-                });
-            });;
+            fs.writeFile(pathToFile, base64Image, { encoding: 'base64' }, function (err) {
+                console.log('File created');
+            });
+
+            audioUrl = `http://${host}:${port}${pathToFile}`;
 
         } else {
             audioUrl = `http://${host}:${port}/${dirname}/${reqAudioUrl}`;
