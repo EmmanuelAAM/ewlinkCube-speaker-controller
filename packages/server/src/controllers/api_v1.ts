@@ -277,11 +277,29 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
         data: {}
     };
 
-   try {
+    try {
         if (reqAudioDownloadUrl) {
-            audioUrl = reqAudioDownloadUrl;
-            console.log(`File url : ${audioUrl}`);
-            logger.debug(`File url: ${audioUrl}`);
+            console.log(`File url : ${reqAudioDownloadUrl}`);
+            logger.debug(`File url: ${reqAudioDownloadUrl}`);
+
+            const dirname = getAudioFilesDir();
+            // //await fs.unlink(path.join(dirname, audioList[i].filename));
+            const response = await axios.get(reqAudioDownloadUrl);
+            console.log(`response : ${response}`);
+            logger.debug(`response: ${response}`);
+            const pathToFile = path.join(dirname, reqAudioFileName);
+
+            console.log(`pathToFile : ${pathToFile}`);
+            logger.debug(`pathToFile: ${pathToFile}`);
+
+            const filePath = fs.createWriteStream(pathToFile);
+            response.data.pipe(filePath);
+            filePath.on('finish', () => {
+                filePath.close();
+                console.log('Download Completed');
+                logger.debug('Download Completed');
+            });
+            audioUrl = `http://${host}:${port}/${dirname}/${pathToFile}`;
         } else {
             audioUrl = `http://${host}:${port}/${dir}/${reqAudioUrl}`;
         }
