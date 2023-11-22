@@ -9,7 +9,7 @@ cp -r ../packages/server/dist build/server
 
 cp -r ../packages/web/dist build/public
 
-ls
+ls build
 
 cp ../docker/Dockerfile build
 cp ../docker/publish.sh build
