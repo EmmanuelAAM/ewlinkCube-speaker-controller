@@ -265,7 +265,8 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
     let audioUrl = '';
     const host = process.env.CONFIG_CUBE_HOSTNAME;
     const port = SERVER_LISTEN_PORT;
-    const dir = !reqAudioDownloadUrl ? existInAudioFilesDir(reqAudioUrl) ? '_audio' : '_audio-cache' : false;
+    // const dir = !reqAudioDownloadUrl ? existInAudioFilesDir(reqAudioUrl) ? '_audio' : '_audio-cache' : false;
+    const dirname = getAudioFilesDir();
 
     const result = {
         error: 0,
@@ -277,7 +278,7 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
         if (reqAudioDownloadUrl) {
             console.log(`File url : ${reqAudioDownloadUrl}`);
 
-            const dirname = getAudioFilesDir();
+
             // //await fs.unlink(path.join(dirname, audioList[i].filename));
             const response = await axios.get(reqAudioDownloadUrl);
             console.log(`response : ${response}`);
@@ -295,7 +296,7 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
             console.log(audioUrl);
 
         } else {
-            audioUrl = `http://${host}:${port}/${dir}/${reqAudioUrl}`;
+            audioUrl = `http://${host}:${port}/${dirname}/${reqAudioUrl}`;
         }
         console.log(`${logType} audioUrl: ${audioUrl}`);
         const playRes = await playAudioFile(audioUrl);
