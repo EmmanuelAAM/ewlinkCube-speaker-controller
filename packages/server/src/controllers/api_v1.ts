@@ -1,4 +1,5 @@
-import fs from 'node:fs/promises';
+import fsp from 'node:fs/promises';
+import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import express from 'express';
@@ -33,6 +34,7 @@ import { existInAudioFilesDir, getAudioFilesDir } from '../utils/etc';
 import { SERVER_LISTEN_PORT } from '../const';
 import { generateAudioFile } from '../utils/pico';
 import SSE from '../utils/sse';
+import axios from 'axios';
 
 type ApiGetAudioListItem = {
     key: number;
@@ -217,7 +219,7 @@ apiv1.get('/api/v1/audio/list', async (req, res) => {
 
     try {
         const dirname = getAudioFilesDir();
-        const files = await fs.readdir(dirname);
+        const files = await fsp.readdir(dirname);
         const audioList = await getAudioList();
         logger.debug(`${logType} audioList: ${JSON.stringify(audioList)}`);
 
@@ -258,8 +260,14 @@ apiv1.get('/api/v1/audio/list', async (req, res) => {
 apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
     // reqAudioUrl 实际上是音频文件的文件名，真实 URL 在调用接口前拼装
     const reqAudioUrl = _.get(req, 'body.audioUrl');
-    const reqAudioFullUrl = _.get(req, 'body.reqAudioFullUrl');
+    const reqAudioDownloadUrl = _.get(req, 'body.reqAudioFullUrl');
+    const reqAudioFileName = _.get(req, 'body.reqAudioFileName');
     const logType = '(apiv1.ihost.playAudio)';
+    let audioUrl = '';
+    const host = process.env.CONFIG_CUBE_HOSTNAME;
+    const port = SERVER_LISTEN_PORT;
+    const dir = existInAudioFilesDir(reqAudioUrl) ? '_audio' : '_audio-cache';
+
     const result = {
         error: 0,
         msg: 'Success',
@@ -267,10 +275,21 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
     };
 
     try {
-        const host = process.env.CONFIG_CUBE_HOSTNAME;
-        const port = SERVER_LISTEN_PORT;
-        const dir = existInAudioFilesDir(reqAudioUrl) ? '_audio' : '_audio-cache';
-        const audioUrl = reqAudioFullUrl ?? `http://${host}:${port}/${dir}/${reqAudioUrl}`;
+        if (reqAudioDownloadUrl) {
+            const dirname = getAudioFilesDir();
+            //await fs.unlink(path.join(dirname, audioList[i].filename));
+            const response = await axios.get(reqAudioDownloadUrl);
+            const pathToFile = path.join(dirname, reqAudioFileName);
+            audioUrl = `http://${host}:${port}/${dirname}/${pathToFile}`;
+            const filePath = fs.createWriteStream(pathToFile);
+            response.data.pipe(filePath);
+            filePath.on('finish', () => {
+                filePath.close();
+                console.log('Download Completed');
+            });
+        } else {
+            audioUrl = `http://${host}:${port}/${dir}/${reqAudioUrl}`;
+        }
         logger.debug(`${logType} audioUrl: ${audioUrl}`);
         const playRes = await playAudioFile(audioUrl);
         logger.debug(`${logType} playRes: ${JSON.stringify(playRes)}`);
@@ -309,7 +328,7 @@ apiv1.post('/api/v1/ihost/callback', async (req, res) => {
 
         try {
             const dirname = getAudioFilesDir();
-            const files = await fs.readdir(dirname);
+            const files = await fsp.readdir(dirname);
             const audioList = await getAudioList();
             logger.debug(`${logType} audioList: ${JSON.stringify(audioList)}`);
 
@@ -469,7 +488,7 @@ apiv1.delete('/api/v1/audio', async (req, res) => {
             } else {
                 // Remove real file.
                 const dirname = getAudioFilesDir();
-                await fs.unlink(path.join(dirname, audioList[i].filename));
+                await fsp.unlink(path.join(dirname, audioList[i].filename));
 
                 // Remove store data.
                 audioList.splice(i, 1);
