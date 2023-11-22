@@ -12,7 +12,7 @@ ENV ENABLE_MIDDLEWARE_LOG=1 \
 WORKDIR /workspace/ewlink-cube-speaker-control
 
 RUN apk add ffmpeg
-RUN apk add picotts --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
+#RUN apk add picotts --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
 COPY . .
 
 CMD ["node", "server/index.js"]
