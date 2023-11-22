@@ -269,7 +269,7 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
     let audioUrl = '';
     const host = process.env.CONFIG_CUBE_HOSTNAME;
     const port = SERVER_LISTEN_PORT;
-    const dir = existInAudioFilesDir(reqAudioUrl) ? '_audio' : '_audio-cache';
+    const dir = !reqAudioDownloadUrl ? existInAudioFilesDir(reqAudioUrl) ? '_audio' : '_audio-cache' : false;
 
     const result = {
         error: 0,
@@ -277,9 +277,11 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
         data: {}
     };
 
-    try {
+   try {
         if (reqAudioDownloadUrl) {
             audioUrl = reqAudioDownloadUrl;
+            console.log(`File url : ${audioUrl}`);
+            logger.debug(`File url: ${audioUrl}`);
         } else {
             audioUrl = `http://${host}:${port}/${dir}/${reqAudioUrl}`;
         }
@@ -288,6 +290,7 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
         logger.debug(`${logType} playRes: ${JSON.stringify(playRes)}`);
         return res.send(result);
     } catch (err: any) {
+        console.log(err);
         logger.error(`${logType} ${err.name}: ${err.message}`);
         result.error = ERR_SERVER_INTERNAL;
         result.msg = 'Server error';
