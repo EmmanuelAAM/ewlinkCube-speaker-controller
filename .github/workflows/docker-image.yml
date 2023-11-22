@@ -42,5 +42,5 @@ jobs:
         version: ${{ secrets.VERSION }}
         usr: ${{ secrets.USR }}
         psw: ${{ secrets.PSW }}
-      working-directory: ./docker
+      working-directory: ./scripts/build
       run: bash publish.sh
