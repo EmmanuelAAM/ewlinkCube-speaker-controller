@@ -279,10 +279,11 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
             console.log(`File url : ${reqAudioDownloadUrl}`);
             const req = axios.get(reqAudioDownloadUrl);
             await req.then(response => {
+                let aux: any = response.data;
                 const pathToFile = path.join(dirname, reqAudioFileName ?? 'temporal.wav');
                 console.log(`pathToFile : ${pathToFile}`);
                 const filePath = fs.createWriteStream(pathToFile);
-                response.data.pipe(filePath);
+                aux.pipe(filePath);
                 filePath.on('finish', () => {
                     filePath.close();
                     console.log('Download Completed');
