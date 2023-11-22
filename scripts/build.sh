@@ -1,13 +1,13 @@
 #!/bin/bash
 build_version=$0
 
-rm -rf build && mkdir build
+mkdir build
 npx lerna run build
 
 
-cp -r ../packages/server/dist ./build/server
+cp -r ../packages/server/dist build/server
 
-cp -r ../packages/web/dist ./build/public
+cp -r ../packages/web/dist build/public
 
 echo "Build content: "
 ls build
@@ -16,9 +16,9 @@ ls build/server
 echo "FE content: "
 ls build/public
 
-cp ../docker/Dockerfile ./build
-cp ../docker/publish.sh ./build
-cp ../docker/.dockerignore ./build
+cp ../docker/Dockerfile build
+cp ../docker/publish.sh build
+cp ../docker/.dockerignore build
 
 cat << EOF > ./build/buildinfo
 Build Version: $version
