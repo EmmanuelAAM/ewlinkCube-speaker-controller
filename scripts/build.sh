@@ -15,6 +15,8 @@ echo "BE content: "
 ls build/server
 echo "FE content: "
 ls build/public
+echo "Full Path:"
+pwd
 
 cp ../docker/Dockerfile build
 cp ../docker/publish.sh build
