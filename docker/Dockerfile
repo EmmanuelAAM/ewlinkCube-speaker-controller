@@ -9,7 +9,7 @@ ENV ENABLE_MIDDLEWARE_LOG=1 \
     LOG_LEVEL=info \
     APP_NAME="IHost-speaker-controller"
 
-WORKDIR /workspace/ewlink-cube-speaker-control
+WORKDIR /workspace/build
 
 RUN apk add ffmpeg
 #RUN apk add picotts --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing/
