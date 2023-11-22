@@ -9,7 +9,7 @@ ENV ENABLE_MIDDLEWARE_LOG=1 \
     LOG_LEVEL=info \
     APP_NAME="TTS2CUBE-Pico"
 
-WORKDIR /workspace/ewelink-cube-tts-addon
+WORKDIR /workspace/ewelink-cube-tts-addon/build
 
 RUN apk add ffmpeg
 RUN apk add picotts --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
