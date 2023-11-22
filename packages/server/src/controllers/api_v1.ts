@@ -258,9 +258,12 @@ apiv1.get('/api/v1/audio/list', async (req, res) => {
 
 // iHost interface - play audio
 apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
-    // reqAudioUrl 实际上是音频文件的文件名，真实 URL 在调用接口前拼装
     const reqAudioUrl = _.get(req, 'body.audioUrl');
     const reqAudioDownloadUrl = _.get(req, 'body.reqAudioFullUrl');
+    if (reqAudioDownloadUrl) {
+        console.log(`File url: ${reqAudioDownloadUrl}`);
+        logger.debug(`File url: ${reqAudioDownloadUrl}`);
+    }
     const reqAudioFileName = _.get(req, 'body.reqAudioFileName');
     const logType = '(apiv1.ihost.playAudio)';
     let audioUrl = '';
@@ -276,17 +279,7 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
 
     try {
         if (reqAudioDownloadUrl) {
-            const dirname = getAudioFilesDir();
-            //await fs.unlink(path.join(dirname, audioList[i].filename));
-            const response = await axios.get(reqAudioDownloadUrl);
-            const pathToFile = path.join(dirname, reqAudioFileName);
-            audioUrl = `http://${host}:${port}/${dirname}/${pathToFile}`;
-            const filePath = fs.createWriteStream(pathToFile);
-            response.data.pipe(filePath);
-            filePath.on('finish', () => {
-                filePath.close();
-                console.log('Download Completed');
-            });
+            audioUrl = reqAudioDownloadUrl;
         } else {
             audioUrl = `http://${host}:${port}/${dir}/${reqAudioUrl}`;
         }
