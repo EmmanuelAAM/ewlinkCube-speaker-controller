@@ -1,5 +1,6 @@
 import fsp from 'node:fs/promises';
 import fs from 'node:fs';
+import http from 'node:http';
 import path from 'node:path';
 import process from 'node:process';
 import express from 'express';
@@ -277,20 +278,18 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
     try {
         if (reqAudioDownloadUrl) {
             console.log(`File url : ${reqAudioDownloadUrl}`);
-            const req = axios.get(reqAudioDownloadUrl);
-            await req.then(response => {
-                let aux: any = response.data;
-                const pathToFile = path.join(dirname, reqAudioFileName ?? 'temporal.wav');
-                console.log(`pathToFile : ${pathToFile}`);
-                const filePath = fs.createWriteStream(pathToFile);
-                aux.pipe(filePath);
+
+            const pathToFile = path.join(dirname, reqAudioFileName ?? 'temporal.wav');
+            console.log(`pathToFile : ${pathToFile}`);
+            const filePath = fs.createWriteStream(pathToFile);
+
+            http.get(reqAudioDownloadUrl, function (response) {
+                response.pipe(filePath);
                 filePath.on('finish', () => {
                     filePath.close();
                     console.log('Download Completed');
                 });
-                audioUrl = `http://${host}:${port}/${dirname}/${pathToFile}`;
-                console.log(audioUrl);
-            })
+            });;
 
         } else {
             audioUrl = `http://${host}:${port}/${dirname}/${reqAudioUrl}`;
