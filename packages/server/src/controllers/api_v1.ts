@@ -601,8 +601,7 @@ apiv1.post('/api/v1/audio/download', async (req, res) => {
         createdAt: now
     };
     await addAudioRecord(audioRecord);
-    _.set(result, 'data.downloadUrl', `_audio/${audioFilename}`);
-    logger.info(`${logType} Result: ${JSON.stringify(result)}`);
+    _.set(result, 'data.downloadUrl', `_audio/${filename}`);
     return res.send(result);
 });
 
