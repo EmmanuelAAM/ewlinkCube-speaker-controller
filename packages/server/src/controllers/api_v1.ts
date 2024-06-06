@@ -259,16 +259,9 @@ apiv1.get('/api/v1/audio/list', async (req, res) => {
 
 // iHost interface - play audio
 apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
+    // reqAudioUrl 实际上是音频文件的文件名，真实 URL 在调用接口前拼装
     const reqAudioUrl = _.get(req, 'body.audioUrl');
-    const reqAudioDownloadUrl = _.get(req, 'body.reqAudioFullUrl');
-    const reqAudioFileName = _.get(req, 'body.reqAudioFileName');
     const logType = '(apiv1.ihost.playAudio)';
-    let audioUrl = '';
-    const host = process.env.CONFIG_CUBE_HOSTNAME;
-    const port = SERVER_LISTEN_PORT;
-    // const dir = !reqAudioDownloadUrl ? existInAudioFilesDir(reqAudioUrl) ? '_audio' : '_audio-cache' : false;
-    const dirname = getAudioFilesDir();
-
     const result = {
         error: 0,
         msg: 'Success',
@@ -276,29 +269,16 @@ apiv1.post('/api/v1/ihost/play-audio', async (req, res) => {
     };
 
     try {
-        if (reqAudioDownloadUrl) {
-            console.log(`File Content : ${reqAudioDownloadUrl}`);
-
-            const pathToFile = path.join(dirname, reqAudioFileName ?? 'temporal.wav');
-            console.log(`pathToFile : ${pathToFile}`);
-            let base64Image = reqAudioDownloadUrl.split(';base64,').pop();
-
-            fs.writeFile(pathToFile, base64Image, { encoding: 'base64' }, function (err) {
-                console.log('File created');
-            });
-
-            audioUrl = `http://${host}:${port}${pathToFile}`;
-
-        } else {
-            audioUrl = `http://${host}:${port}/${dirname}/${reqAudioUrl}`;
-        }
-        console.log(`${logType} audioUrl: ${audioUrl}`);
+        const host = process.env.CONFIG_CUBE_HOSTNAME;
+        const port = SERVER_LISTEN_PORT;
+        const dir = existInAudioFilesDir(reqAudioUrl) ? '_audio' : '_audio-cache';
+        const audioUrl = `http://${host}:${port}/${dir}/${reqAudioUrl}`;
+        logger.debug(`${logType} audioUrl: ${audioUrl}`);
         const playRes = await playAudioFile(audioUrl);
-        console.log(`${logType} playRes: ${JSON.stringify(playRes)}`);
+        logger.debug(`${logType} playRes: ${JSON.stringify(playRes)}`);
         return res.send(result);
     } catch (err: any) {
-        console.log(err);
-        console.log(`${logType} ${err.name}: ${err.message}`);
+        logger.error(`${logType} ${err.name}: ${err.message}`);
         result.error = ERR_SERVER_INTERNAL;
         result.msg = 'Server error';
         logger.info(`${logType} Result: ${JSON.stringify(result)}`);
