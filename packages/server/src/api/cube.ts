@@ -13,6 +13,7 @@ import {
 } from '../error';
 import { GET_BRIDGE_AT_TIMEOUT, SERVER_LISTEN_PORT } from '../const';
 import logger from '../logger';
+import { error } from 'winston';
 
 const EWELINK_CUBE_HOSTNAME = process.env.CONFIG_CUBE_HOSTNAME as string;
 const CubeApiClient = CubeApi.ihostApi;
@@ -157,7 +158,8 @@ export async function playAudioFile(audioUrl: string) {
         result.error = ERR_NO_CUBE_API_CLIENT;
     } else {
         const res = await cubeApiClient.playAudio(audioUrl);
-        logger.debug(`(cubeApi.playAudioFile) res.error: ${res.error}  ${JSON.stringify(res)}`);
+        console.log(res.error)
+        console.log(`(cubeApi.playAudioFile) res.error: ${res.error}  ${JSON.stringify(res)}`);
         if (res.error === 0) {
             result.data = res.data;
         } else if (res.error === 401) {
