@@ -33,9 +33,9 @@ import {
 import { addAudioRecord, getAudioList, setAudioList } from '../store/audio';
 import { existInAudioFilesDir, getAudioFilesDir } from '../utils/etc';
 import { SERVER_LISTEN_PORT } from '../const';
-import { generateAudioFile } from '../utils/pico';
+import { generateAudioFile, downloadAudioFile } from '../utils/pico';
 import SSE from '../utils/sse';
-import axios from 'axios';
+
 
 type ApiGetAudioListItem = {
     key: number;
@@ -581,6 +581,29 @@ apiv1.put('/api/v1/audio', async (req, res) => {
         logger.info(`${logType} Result: ${JSON.stringify(result)}`);
         return res.send(result);
     }
+});
+
+apiv1.post('/api/v1/audio/download', async (req, res) => {
+    const url = _.get(req, 'body.url');
+    const result = {
+        error: 0,
+        msg: 'Success',
+        data: {}
+    };
+    const now = Date.now();
+    const filename = `${now}.wav`;
+    await downloadAudioFile(url, filename);
+    const audioRecord = {
+        id: uuid(),
+        filename: filename,
+        text: '',
+        config: '',
+        createdAt: now
+    };
+    await addAudioRecord(audioRecord);
+    _.set(result, 'data.downloadUrl', `_audio/${audioFilename}`);
+    logger.info(`${logType} Result: ${JSON.stringify(result)}`);
+    return res.send(result);
 });
 
 // Generate audio file

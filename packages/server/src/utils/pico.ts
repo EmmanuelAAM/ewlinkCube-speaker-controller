@@ -1,5 +1,6 @@
 // Pico TTS utils
-
+import fs from 'node:fs';
+import axios from 'axios';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { getAudioCacheFilesDir, getAudioFilesDir } from './etc';
@@ -69,5 +70,24 @@ export async function generateAudioFile(params: GenerateAudioFileParams) {
     } catch (err: any) {
         logger.error(`${logType} error: ${err.message}`);
         return -1;
+    }
+}
+
+export async function downloadAudioFile(url: string, filename: string) {
+    const dest = path.join(getAudioFilesDir(), filename);
+    const writer = fs.createWriteStream(dest);
+    try {
+        const response = await axios({
+            url,
+            method: 'GET',
+            responseType: 'stream',
+        });
+        response.data.pipe(writer);
+        return new Promise((resolve, reject) => {
+            writer.on('finish', resolve);
+            writer.on('error', reject);
+        });
+    } catch (error: any) {
+        console.error(`Error: ${error.message}`);
     }
 }
